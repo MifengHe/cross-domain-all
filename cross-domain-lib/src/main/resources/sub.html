@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CROSS-DOMAIN-SUB</title>
+    <script type="text/javascript">
+        var sub_name = "$sub_name";
+        var sub_win = parent.frames[sub_name]
+        var action = '$action';
+        var data = $data;
+        var cb_action = '$cb_action';
+        var payload = {action: action, data: data, cb_action: cb_action};
+        if (!sub_win) {
+            throw new Error('frame.name "'+sub_name+'" must be exists');
+        }
+        if (!sub_win.crossDomainEventBus) {
+            var url = sub_win.location.href;
+            throw new Error('"'+url+'" must be reference cross-domain-sub.js');
+        }
+        sub_win.crossDomainEventBus.dispatch('$action', payload);
+    </script>
+</head>
+<body>
+
+</body>
+</html>

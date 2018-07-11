@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CROSS-DOMAIN-MAIN</title>
+    <script type="text/javascript">
+        var action = '$action';
+        var data = $data;
+        var cb_action = '$cb_action';
+        var payload = {action: action, data: data, cb_action: cb_action};
+        if (!parent.parent.crossDomainEventBus) {
+            var url = parent.parent.location.href;
+            throw new Error('"'+url+'" must be reference cross-domain-main.js');
+        }
+        parent.parent.crossDomainEventBus.dispatch('$action', payload);
+    </script>
+</head>
+<body>
+
+</body>
+</html>
