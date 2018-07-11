@@ -1,4 +1,4 @@
-package com.bee.crossdomaindemo;
+package com.os.crossdomaindemo;
 
 import com.os.crossdomain.CrossDomainMainServlet;
 import com.os.crossdomain.CrossDomainSubServlet;
