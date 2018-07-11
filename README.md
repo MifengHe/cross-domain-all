@@ -1,4 +1,9 @@
-### cross-domain 跨域集成方案
+## cross-domain 跨域集成方案
+
+### 点击主页 `send Random` 按钮
+![Alt text](./images/main-call-sub.png "主页调用引用页")
+### 点击子页(引用页) `popup` 按钮
+![Alt text](./images/sub-call-main.png "引用页调用主页")
 
 #### 1 添加依赖
 

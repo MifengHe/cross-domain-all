@@ -8,19 +8,26 @@
 <body>
 <h1>Main App</h1>
     <button onclick="sendRandom()">send Random</button>
-    <iframe name="baidu" src="http://127.0.0.1:8080/sub.html?url=http://localhost:8080/cross-domain-main.html" style="border: none; width: 100%; height: 500px;"></iframe>
+    <iframe name="subFrame" src="http://127.0.0.1:8080/sub.html?url=http://localhost:8080/cross-domain-main.html" style="border: none; width: 100%; height: 500px;"></iframe>
     <script type="text/javascript">
-        var main = new CrossDomainMain('baidu', 'http://127.0.0.1:8080/cross-domain-sub.html');
-        console.log('main', main);
-
+        var main = new CrossDomainMain('subFrame', 'http://127.0.0.1:8080/cross-domain-sub.html');
         function sendRandom() {
-            main.dispatch("sendRandom", new Date().getTime(), function () {
-                console.log(1, 'callback', arguments);
+            var data = "我是 main-sendRandom-dispatch 传过来的值：" + new Date().getTime();
+            main.dispatch("sendRandom", data, function (payload) {
+                console.group("main-callback-sendRandom");
+                console.log('payload', payload);
+                console.log('payload.action', payload.action);
+                console.log("payload.data", payload.data);
+                console.groupEnd();
             });
         }
 
         main.action('popup', function(payload) {
-           console.log('popup', payload);
+            console.group("main-action-popup");
+            console.log("payload.action", payload.action);
+            console.log("payload.data", payload.data);
+            console.groupEnd();
+            return "我是 main-action-popup 返回值:" + Math.floor(Math.random() * 10000);
         });
     </script>
 </body>

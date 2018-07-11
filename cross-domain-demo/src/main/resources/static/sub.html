@@ -20,18 +20,21 @@
     var url = getParameter("url");
     var sub = new CrossDomainSub(url);
 
-    sub.action('register', function () {
-        console.log('register', arguments);
-    });
-
-    sub.action("sendRandom", function () {
-        console.log('sendRandom', arguments);
-        return 2222;
+    sub.action("sendRandom", function (payload) {
+        console.group("sub-action-sendRandom");
+        console.log("payload.action", payload.action);
+        console.log("payload.data", payload.data);
+        console.groupEnd();
+        return "我是sub-action-sendRandom返回值:" + Math.random().toString(16).substr(2);
     });
 
     function onPopup() {
-        sub.dispatch('popup', Math.random().toString(16).substr(2), function () {
-            console.log('popup-cb', arguments);
+        var data = '我是 sub-dispatch-popup 传过来的值：' + Math.random().toString(16).substr(2);
+        sub.dispatch('popup', data, function (payload) {
+            console.group("sub-callback-popup");
+            console.log("payload.action", payload.action);
+            console.log("payload.data", payload.data);
+            console.groupEnd();
         });
     }
 </script>
