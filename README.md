@@ -121,15 +121,23 @@ class Application {
     <script type="text/javascript">
         // 创建对象CrossDomainMain
         var main = new CrossDomainMain('sub', 'http://192.168.1.168:8081/cross-domain-sub.html');
-
         function sendRandom() {
-            main.dispatch("sendRandom", new Date().getTime(), function () {
-                console.log(1, 'callback', arguments);
+            var data = "我是 main-sendRandom-dispatch 传过来的值：" + new Date().getTime();
+            main.dispatch("sendRandom", data, function (payload) {
+                console.group("main-callback-sendRandom");
+                console.log('payload', payload);
+                console.log('payload.action', payload.action);
+                console.log("payload.data", payload.data);
+                console.groupEnd();
             });
         }
 
         main.action('popup', function(payload) {
-           console.log('popup', payload);
+            console.group("main-action-popup");
+            console.log("payload.action", payload.action);
+            console.log("payload.data", payload.data);
+            console.groupEnd();
+            return "我是 main-action-popup 返回值:" + Math.floor(Math.random() * 10000);
         });
     </script>
 </body>
@@ -150,30 +158,33 @@ class Application {
 <button onclick="onPopup()">popup</button>
 <script>
     var getParameter = function(name, url) {
-        if (!url) url = window.location.href;
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    };
-    var url = getParameter("url");
-    var sub = new CrossDomainSub(url);
-
-    sub.action('register', function () {
-        console.log('register', arguments);
-    });
-
-    sub.action("sendRandom", function () {
-        console.log('sendRandom', arguments);
-        return 2222;
-    });
-
-    function onPopup() {
-        sub.dispatch('popup', Math.random().toString(16).substr(2), function () {
-            console.log('popup-cb', arguments);
+            if (!url) url = window.location.href;
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        };
+        var url = getParameter("url");
+        var sub = new CrossDomainSub(url);
+    
+        sub.action("sendRandom", function (payload) {
+            console.group("sub-action-sendRandom");
+            console.log("payload.action", payload.action);
+            console.log("payload.data", payload.data);
+            console.groupEnd();
+            return "我是sub-action-sendRandom返回值:" + Math.random().toString(16).substr(2);
         });
-    }
+    
+        function onPopup() {
+            var data = '我是 sub-dispatch-popup 传过来的值：' + Math.random().toString(16).substr(2);
+            sub.dispatch('popup', data, function (payload) {
+                console.group("sub-callback-popup");
+                console.log("payload.action", payload.action);
+                console.log("payload.data", payload.data);
+                console.groupEnd();
+            });
+        }
 </script>
 </body>
 </html>
