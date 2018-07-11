@@ -262,3 +262,5 @@ interface CrossDomainSub {
 }
 
 ```
+
+> 思路来源: [iframe与主框架跨域相互访问方法 - CSDN博客]: https://blog.csdn.net/fdipzone/article/details/17619673
