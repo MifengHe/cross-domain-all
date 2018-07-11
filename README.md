@@ -174,7 +174,7 @@ class Application {
 </html>
 ```
 
-#### 3 JS对象说明
+#### 4 JS对象说明
 ```javascript
 /**
 *  跨域主页
